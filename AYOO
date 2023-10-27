@@ -1,0 +1,272 @@
+package algorithms;
+
+import java.util.*;
+import java.io.*;
+
+public class analysis {
+	
+	static int[] randoms;
+	static int   target;
+	static int   sizeArray = 10000000;
+	
+	public static void generateRandomArray(int n1)
+	{
+		randoms = new int[n1];
+		for (int i = 0; i < n1; i++)
+		{
+			randoms[i] = (int)(Math.random()*n1);
+		}
+	}
+	
+	public static void generateSortedArray(int n1)
+	{
+		randoms = new int[n1];
+		for (int i = 0; i < n1; i++)
+		{
+			randoms[i] = i;
+		}
+	}
+	
+
+	public static void swap(int i1, int i2)
+	{
+		int[] tc = randoms;
+
+		int temp = tc[i1];
+		tc[i1]   = tc[i2];
+		tc[i2]   = temp;
+	}
+	
+	public static void sort()
+	{
+		
+		for (int a = 0; a < randoms.length; a++)
+		{
+			for (int i = 0; i < randoms.length-1; i++)
+			{
+				int rhi    = i+1;
+				int leftP  = randoms[i];
+				int rightP = randoms[rhi];
+				if (leftP > rightP)
+				{
+					int temp = randoms[leftP];
+					randoms[leftP]   = randoms[rightP];
+					randoms[rightP]   = temp;	
+				}
+			}
+		}
+	}
+	
+	public static void initializeRandom(int s)
+	{
+		for (int i = 0; i < s; i++)
+		{
+			randoms[i] = (int)(Math.random()*s);
+		}
+	}
+	
+	public static void timeInitializeRandom()
+	{
+		int n1         = sizeArray;
+		randoms        = new int[n1];
+		long timeStart = System.nanoTime();
+		generateRandomArray(n1);
+		long timeEnd   = System.nanoTime();
+		
+		double timeLength1 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to initialize random array of size "+n1+" is "+timeLength1+" seconds");
+		
+		n1        = n1*10;
+		randoms   = new int[n1];
+		timeStart = System.nanoTime();
+		generateRandomArray(n1);
+		timeEnd   = System.nanoTime();
+		
+		double timeLength2 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to initialize random array of size "+n1+" is "+timeLength2+" seconds");
+	
+		System.out.println("the ratio of n2 to n1 is 10");
+		System.out.println("the ration of timeLength2 to timeLength1 is "+timeLength2/timeLength1);
+	}
+	
+	public static void timeInitializeSort()
+	{
+		int n1         = sizeArray;
+		randoms        = new int[n1];
+		long timeStart = System.nanoTime();
+		generateSortedArray(n1);
+		long timeEnd   = System.nanoTime();
+		
+		double timeLength1 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to initialize sorted array of size "+n1+" is "+timeLength1+" seconds");
+		
+		n1        = n1*10;
+		randoms   = new int[n1];
+		timeStart = System.nanoTime();
+		generateSortedArray(n1);
+		timeEnd   = System.nanoTime();
+		
+		double timeLength2 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to initialize sorted array of size "+n1+" is "+timeLength2+" seconds");
+	
+		System.out.println("the ratio of n2 to n1 is 10");
+		System.out.println("the ration of timeLength2 to timeLength1 is "+timeLength2/timeLength1);
+	}
+	
+	public static void timeSort()
+	{
+		int n1         = sizeArray;
+		generateRandomArray(n1);
+		long timeStart = System.nanoTime();
+		sort();
+		long timeEnd   = System.nanoTime();
+		
+		double timeLength1 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to sort array of size "+n1+" is "+timeLength1+" seconds");
+		
+		n1        = n1*10;
+		generateRandomArray(n1);
+		timeStart = System.nanoTime();
+		sort();
+		timeEnd   = System.nanoTime();
+		
+		double timeLength2 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to sort array of size "+n1+" is "+timeLength2+" seconds");
+	
+		System.out.println("the ratio of n2 to n1 is 10");
+		System.out.println("the ration of timeLength2 to timeLength1 is "+timeLength2/timeLength1);
+	}
+	
+	public static void timeSearch()
+	{
+		int n1         = sizeArray;
+		generateSortedArray(n1);
+		long timeStart = System.nanoTime();
+		binarySearch(randoms, target);
+		long timeEnd   = System.nanoTime();
+		
+		double timeLength1 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to serach array of size "+n1+" is "+timeLength1+" seconds");
+		
+		n1        = n1*10;
+		generateSortedArray(n1);
+		timeStart = System.nanoTime();
+		binarySearch(randoms, target);
+		timeEnd   = System.nanoTime();
+		
+		double timeLength2 = ((timeEnd - timeStart)/1000000000.0);
+		System.out.println("time to serach array of size "+n1+" is "+timeLength2+" seconds");
+	
+		System.out.println("the ratio of n2 to n1 is 10");
+		System.out.println("the ration of timeLength2 to timeLength1 is "+timeLength2/timeLength1);
+	}
+	
+	public static void getTarget() throws Exception
+	{
+		String fileName = "data.txt";
+		Scanner sc = new Scanner(new BufferedReader(new FileReader(fileName)));
+		
+		if (sc.hasNext())
+		{
+		target = sc.nextInt();
+		}
+		
+		if(sc != null)
+		sc.close();
+	}
+	
+	public static boolean binarySearch(int a[], int target)
+	{
+		int leftI = 0, rightI = a.length - 1, middleI = (leftI+rightI)/2;
+		boolean found = false;
+		if (target < 0 || target > a.length)
+		return found;
+		
+		while ((!found) && (leftI <= rightI))
+		{
+			if (a[middleI] == target)
+				found = true;        // or return true ????
+			else
+				if (target < a[middleI])
+					rightI = middleI - 1;
+				else
+					leftI = middleI + 1;
+			middleI = (leftI + rightI) / 2;
+		}
+		return found;
+}
+	
+	public static void main(String[] arg)
+	{
+//		timeInitializeRandom();
+		
+//		timeSort();
+		
+//		generateRandomArray(sizeArray);
+		
+		try {getTarget();} 
+		catch (Exception e) {e.printStackTrace();}
+		try {timeSearch();} 
+		catch (Exception e) {e.printStackTrace();}
+		
+
+//		long tSt = System.nanoTime();
+//		binarySearch(randoms, target);
+//		long tEd   = System.nanoTime();
+//		double tLe = ((tEd - tSt)/1000000000.0);
+//		System.out.println("search for target took "+tLe+" seconds");
+//		binarySearch(randoms, target);
+//		
+//		timeInitializeSort();
+		
+
+
+		
+	}
+	
+	/**	For the generateRandomArray() method :
+
+		We used 10000000 for random 10000000 for pre-sorted for n and O(n) is linear O(n)
+
+		The time the generate...Array() method took to run: t1 = 0.1966349 seconds for random; t1 = 0.0216615 seconds for pre-sorted
+
+		After running the simulation again using using 10 times the number of elements in question 1:
+
+		The time the constructor took to run: t2 = 1.9536922 seconds for random; t2 = 0.2138909 seconds for pre-sorted
+
+		t2 / t1 = 9.935632992922416 for random 9.874242319322299 for pre-sorted
+		this value shows that O(n) is linear, because when we increase n by ten the ratio of the times is ten. Our number is close to 10
+
+		For the sort method :
+
+		we used 10000 for n, and O(n) is quadratic O(n^2)
+
+		time the sort took to run: t1 = 3427156 seconds
+
+		After running the simulation again using 10 times the number of elements in question 1:
+
+		time the sort took to run: t2 = 33.9621617 seconds
+
+		t2 / t1 = 99.0972155921703
+		this value shows that big O is n^2 because when we increase n by ten the ratio of time is 100 and our recorded value is near 100
+
+		For search method:
+
+		we used 10000000 for n and O(n) is logarithmic O(logbase2(n))
+
+		time the search took to run: t1 = 7.2E-6 seconds
+
+		after running the simulation again using using 10 times the number of elements in question 1:
+
+		time the search took to run: t2 = 8.5E-6 seconds
+
+		t2 / t1 = 1.1805555555555556
+		the ratio of t2/t1 is close to the ratio of (log base 2 of n) to (the log base 2 of n*10) which is around 1.14 
+		this shows that big O is logarithmic because our calcuated value is close to 1.14
+
+		Based upon the above answers, did the time correspond with the "Big-Oh" calculations for each of the three methods? 
+		constructor? _X_yes / no______ sorting? __X___yes / no_________ searching? __X_yes / no__________
+
+		Clarify any discrepancies between O(n) theory and what you found in practice:
+		*/
+}
